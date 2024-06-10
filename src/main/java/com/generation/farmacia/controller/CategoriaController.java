@@ -1,4 +1,4 @@
-package com.generation.controller;
+package com.generation.farmacia.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,23 +18,22 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.generation.model.CategoriaModel;
-import com.generation.repository.CategoriaRepository;
+import com.generation.farmacia.model.CategoriaModel;
+import com.generation.farmacia.repository.CategoriaRepository;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/Categorias")  
+@RequestMapping("/categorias")  
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CategoriaController {
 	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
-	@GetMapping  
+	@GetMapping
 	public ResponseEntity<List<CategoriaModel>> getAll(){
 		return ResponseEntity.ok(categoriaRepository.findAll());
-		
 	}
 	
 	 @PostMapping
@@ -61,5 +60,33 @@ public class CategoriaController {
 	        
 	        categoriaRepository.deleteById(id);              
 	    }
-
+	    
+	    @GetMapping("/{id}")
+		public ResponseEntity<CategoriaModel> getById(@PathVariable Long id) {
+			return categoriaRepository.findById(id).map(resp -> ResponseEntity.ok(resp))
+					.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 }
+	    @GetMapping("/descricao/{descricao}")
+		public ResponseEntity<List<CategoriaModel>> getByDescricao(@PathVariable String descricao) {
+			return ResponseEntity.ok(categoriaRepository.findAllByDescricaoContainingIgnoreCase(descricao));
+		}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
